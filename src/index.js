@@ -1,4 +1,3 @@
-// index.js
 import express from 'express';
 import morgan from 'morgan';
 import { PORT } from './config.js';
@@ -13,7 +12,7 @@ import AsistenciaAsesoriaRoutes from './routes/asistenciaAsesoriaRoutes.js';
 import AsesoriaRoutes from './routes/asesoriaRoutes.js';
 import AmigoAcademicoRoutes from './routes/amigoAcademicoRoutes.js';
 import AsistenciaAmigoAcademico from './routes/asistenciaAmigoAcademicoRoutes.js';
-
+import { setupSwagger } from './swaggerConfig.js';
 
 const app = express();
 
@@ -21,6 +20,9 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Configurar Swagger
+setupSwagger(app);
 
 // Rutas
 app.use('/api/usuarios', usuarioRoutes);
@@ -46,6 +48,7 @@ async function startServer() {
 
         app.listen(PORT, () => {
             console.log(`Servidor funcionando en el puerto ${PORT}`);
+            console.log(`Documentación API disponible en http://localhost:${PORT}/api-docs`);
         });
     } catch (error) {
         console.error('Error al conectar a la base de datos:', error);
